@@ -1,4 +1,4 @@
-package org.example;
+package bry.bry;
 
 import java.io.BufferedReader;
 import java.io.IOException;
