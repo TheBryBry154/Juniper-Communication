@@ -1,5 +1,7 @@
 package bry.bry;
 
+import bry.bry.windows.WindowMaker;
+
 import javax.swing.*;
 import java.time.LocalDateTime;
 
@@ -12,7 +14,7 @@ public class LogStuff {
 
         textArea.append( "["+
                 LocalDateTime.now().toLocalDate() +
-                "|" +
+                " | " +
                 LocalDateTime.now().toLocalTime().minusNanos(LocalDateTime.now().toLocalTime().getNano()) +
                 "]  " +
                 toLog +

@@ -1,4 +1,4 @@
-package bry.bry;
+package bry.bry.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +10,8 @@ import java.net.Socket;
 import static java.lang.System.out;
 
 public class ServerStuff {
+
+
 
 
     private static ServerSocket serverSocket;
@@ -26,14 +28,18 @@ public class ServerStuff {
 
          clientSocket = serverSocket.accept();
 
-
         System.out.println("new server client with port: " + clientSocket.getPort() + " and address: " + clientSocket.getInetAddress());
 
         writer = new PrintWriter(clientSocket.getOutputStream(), true);
         reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
+
+
         String inputLine;
         while ((inputLine = reader.readLine()) != null) {
+
+
+
             if (".".equals(inputLine)) {
                 out.println("good bye");
                  break;
@@ -41,7 +47,6 @@ public class ServerStuff {
             writer.println(inputLine);
            //  out.println(inputLine);
         }
-
             stopServer();
         }
 
@@ -58,6 +63,7 @@ public class ServerStuff {
         serverSocket.close();
         out.println("SERVER TERMINATED");
     }
+
 
 
 

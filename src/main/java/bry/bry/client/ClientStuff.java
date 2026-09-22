@@ -1,13 +1,12 @@
-package bry.bry;
+package bry.bry.client;
+
+import bry.bry.LogStuff;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class ClientStuff {
 
@@ -23,7 +22,7 @@ public class ClientStuff {
         writer = new PrintWriter(clientSocket.getOutputStream(), true);
         reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-
+        System.out.println("Connected: " + clientSocket.isConnected());
     }
 
     public static void sendMessage(String msg) throws IOException {
@@ -51,28 +50,15 @@ public class ClientStuff {
     }
 
 
-    public static void echoTest(String ipAdr, Boolean on) throws IOException {
 
 
-        Scanner keyboard = new Scanner(System.in);
-
-        while (on) {
-            try {
-                Socket socket = new Socket();
-                socket.connect(new InetSocketAddress(InetAddress.getByName(ipAdr), 154));
-                socket.close();
-            } catch (IOException e) {
-                System.out.println(e);
-                break;
-            }
 
 
-            sendMessage(keyboard.nextLine());
-            System.out.println(getOutput());
 
-
-        }
 
 
     }
-}
+
+
+
+
