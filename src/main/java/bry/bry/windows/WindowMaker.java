@@ -25,11 +25,14 @@ public class WindowMaker {
     public static JMenu menu = new JMenu("File");
     public static JMenuItem connectItem = new JMenuItem("Connect");
 
+    public static DefaultListModel listModel = new DefaultListModel();
+
+    public static JList deviceList = new JList(listModel);
+    public static JScrollPane deviceListScroll = new JScrollPane(deviceList);
+    public static JSplitPane devicePane = new JSplitPane(
+            JSplitPane.HORIZONTAL_SPLIT,true, deviceListScroll, null);
 
     public static JTextArea logArea = new JTextArea(10, 1);
-
-
-
 
     public static JScrollPane logPane = new JScrollPane(logArea);
 
@@ -50,11 +53,23 @@ public class WindowMaker {
         bar.getComponent().setBackground(Color.gray);
         bar.add(menu);
 
+        deviceList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        deviceList.setLayoutOrientation(JList.VERTICAL);
+        deviceList.setVisibleRowCount(-1);
+
+
+
+        deviceList.setSize(100,100);
+        deviceListScroll.setBounds(10,10,10,1000);
+
+        devicePane.setMinimumSize(new Dimension(100,100));
+        mainFrame.add(devicePane);
+
         connectButton.setBounds(450, 350, 100, 100);
         connectButton.setLayout(new FlowLayout());
         connectButton.setBackground(Color.gray);
         connectButton.addActionListener(connectListener);
-        connectButton.setVisible(true);
+
 
         logArea.setEditable(true);
 
