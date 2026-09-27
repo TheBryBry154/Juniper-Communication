@@ -1,15 +1,12 @@
 package bry.bry.windows;
 
-import bry.bry.LogStuff;
-import bry.bry.client.ClientStuff;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
+import java.net.URL;
 
 import static bry.bry.windows.SettingsWindow.settingsItem;
 import static bry.bry.windows.SettingsWindow.settingsListener;
@@ -29,12 +26,15 @@ public class WindowMaker {
 
     public static JList deviceList = new JList(listModel);
     public static JScrollPane deviceListScroll = new JScrollPane(deviceList);
-    public static JSplitPane devicePane = new JSplitPane(
-            JSplitPane.HORIZONTAL_SPLIT,true, deviceListScroll, null);
 
     public static JTextArea logArea = new JTextArea(10, 1);
-
     public static JScrollPane logPane = new JScrollPane(logArea);
+
+    public static JSplitPane mainPane = new JSplitPane(
+            JSplitPane.HORIZONTAL_SPLIT,true, deviceListScroll, logPane);
+
+
+
 
 
     public static void newMainWindow() throws InterruptedException {
@@ -59,11 +59,7 @@ public class WindowMaker {
 
 
 
-        deviceList.setSize(100,100);
-        deviceListScroll.setBounds(10,10,10,1000);
-
-        devicePane.setMinimumSize(new Dimension(100,100));
-        mainFrame.add(devicePane);
+        //deviceList.setSize(100,100);
 
         connectButton.setBounds(450, 350, 100, 100);
         connectButton.setLayout(new FlowLayout());
@@ -73,9 +69,15 @@ public class WindowMaker {
 
         logArea.setEditable(true);
 
+        deviceList.setCellRenderer(new DeviceListRenderer());
+        listModel.addElement("apple");
+        listModel.addElement("fritter");
 
 
-        logPane.setBounds(600, 0, 400, 500);
+        deviceList.setFixedCellHeight(50);
+
+
+        // logPane.setBounds(600, 0, 400, 500);
 
 
 
@@ -86,14 +88,15 @@ public class WindowMaker {
         mainFrame.setVisible(true);
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        mainFrame.setLayout((LayoutManager) null);
+        mainFrame.setLayout(new GridLayout());
 
 
-        mainFrame.getContentPane().add(logPane);
+        mainPane.setDividerLocation(200);
 
+        mainFrame.getContentPane().add(mainPane);
         mainFrame.setJMenuBar(bar);
         mainFrame.setResizable(true);
-        mainFrame.getContentPane().add(connectButton);
+
 
     }
 
@@ -108,6 +111,10 @@ public class WindowMaker {
         public void actionPerformed(ActionEvent e) {
 
              ConnectWindow.newConnectWindow();
+//            mainPane.setRightComponent(connectButton);
+//            mainPane.setDividerLocation(mainPane.getLastDividerLocation());
+
+
 
         }
     };

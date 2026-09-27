@@ -54,7 +54,7 @@ public class ConnectWindow {
         public void actionPerformed(ActionEvent e) {
 
             System.out.println("rahh");
-            WindowMaker.listModel.addElement("a");
+            WindowMaker.listModel.addElement(deviceNameField.getText());
 
 
         }
