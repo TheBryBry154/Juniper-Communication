@@ -20,7 +20,9 @@ public class WindowMaker {
 
     public static JMenuBar bar = new JMenuBar();
     public static JMenu menu = new JMenu("File");
+
     public static JMenuItem connectItem = new JMenuItem("Connect");
+    public static JMenuItem logItem = new JMenuItem("Log");
 
     public static DefaultListModel listModel = new DefaultListModel();
 
@@ -45,10 +47,14 @@ public class WindowMaker {
         settingsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
         settingsItem.addActionListener(settingsListener);
 
+        logItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_DOWN_MASK));
+        logItem.addActionListener(logListener);
+
 
         menu.setMnemonic(KeyEvent.VK_E);
         menu.add(connectItem);
         menu.add(settingsItem);
+        menu.add(logItem);
 
         bar.getComponent().setBackground(Color.gray);
         bar.add(menu);
@@ -56,6 +62,7 @@ public class WindowMaker {
         deviceList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         deviceList.setLayoutOrientation(JList.VERTICAL);
         deviceList.setVisibleRowCount(-1);
+
 
 
 
@@ -70,14 +77,10 @@ public class WindowMaker {
         logArea.setEditable(true);
 
         deviceList.setCellRenderer(new DeviceListRenderer());
-        listModel.addElement("apple");
-        listModel.addElement("fritter");
 
 
         deviceList.setFixedCellHeight(50);
 
-
-        // logPane.setBounds(600, 0, 400, 500);
 
 
 
@@ -103,7 +106,15 @@ public class WindowMaker {
 
 
 
+    public static ActionListener logListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
 
+            deviceList.clearSelection();
+            mainPane.setRightComponent(logPane);
+            mainPane.setDividerLocation(mainPane.getLastDividerLocation());
+         }
+    };
 
 
     public static ActionListener connectListener = new ActionListener() {

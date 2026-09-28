@@ -48,13 +48,29 @@ public class ConnectWindow {
 
     }
 
+    public static void newErrorMessage(String error, JFrame owner, String header){
+        JDialog dialog = new JDialog(owner,header);
+        JLabel label = new JLabel(error);
+        dialog.add(label);
+        dialog.setSize(100,50);
+        dialog.setResizable(false);
+        dialog.setLayout(new GridLayout());
+        dialog.setLocationRelativeTo(null);
+        dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        dialog.setVisible(true);
+    }
 
     public static ActionListener connectListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
 
             System.out.println("rahh");
-            WindowMaker.listModel.addElement(deviceNameField.getText());
+
+            if (!DevicePanes.devicePanels.containsKey(deviceNameField.getText())){
+                DevicePanes.newPanelTemplate(deviceNameField.getText(), ipAdrField.getText());
+            } else newErrorMessage("Cannot have the same name as another entry",connectFrame,"Connect Error");
+
+
 
 
         }

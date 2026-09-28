@@ -31,7 +31,12 @@ public class DeviceListRenderer extends DefaultListCellRenderer  {
             if (cellHasFocus)  label.setIcon(new ImageIcon(bluePath.toString()));
             else label.setIcon(new ImageIcon(dogsPath.toString()));
 
-            label.setHorizontalTextPosition(JLabel.LEFT);
+            if (isSelected && WindowMaker.mainPane.getRightComponent() != DevicePanes.devicePanels.get(value)){
+                WindowMaker.mainPane.setRightComponent(DevicePanes.devicePanels.get(value));
+                WindowMaker.mainPane.setDividerLocation(WindowMaker.mainPane.getLastDividerLocation());
+            }
+
+            label.setHorizontalTextPosition(JLabel.RIGHT);
             label.setFont(font);
             return label;
         }
