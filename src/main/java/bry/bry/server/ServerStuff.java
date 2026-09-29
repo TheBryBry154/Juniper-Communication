@@ -1,5 +1,7 @@
 package bry.bry.server;
 
+import bry.bry.LogStuff;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,20 +22,23 @@ public class ServerStuff {
     private static BufferedReader reader;
 
     public static void openServer(int port) throws IOException {
+        try {
+            out.println("opening server");
 
-        out.println("opening server");
+            serverSocket = new ServerSocket(port);
+            out.println("new server with port: " + serverSocket.getLocalPort() + " and address: " + serverSocket.getInetAddress());
 
-        serverSocket = new ServerSocket(port);
-        out.println("new server with port: " + serverSocket.getLocalPort() + " and address: " + serverSocket.getInetAddress());
+            clientSocket = serverSocket.accept();
 
-         clientSocket = serverSocket.accept();
+            System.out.println("new server client with port: " + clientSocket.getPort() + " and address: " + clientSocket.getInetAddress());
 
-        System.out.println("new server client with port: " + clientSocket.getPort() + " and address: " + clientSocket.getInetAddress());
+            writer = new PrintWriter(clientSocket.getOutputStream(), true);
+            reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-        writer = new PrintWriter(clientSocket.getOutputStream(), true);
-        reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-
+        } catch (Exception e) {
+            LogStuff.putToErrorOut(e.getMessage());
+            throw new RuntimeException(e);
+        }
 
         String inputLine;
         while ((inputLine = reader.readLine()) != null) {

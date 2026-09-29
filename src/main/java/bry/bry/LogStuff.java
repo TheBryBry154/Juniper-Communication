@@ -4,6 +4,7 @@ import bry.bry.windows.WindowMaker;
 
 import javax.swing.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class LogStuff {
 
@@ -12,11 +13,26 @@ public class LogStuff {
 
         JTextArea textArea = WindowMaker.logArea;
 
-        textArea.append( "["+
-                LocalDateTime.now().toLocalDate() +
-                " | " +
-                LocalDateTime.now().toLocalTime().minusNanos(LocalDateTime.now().toLocalTime().getNano()) +
-                "]  " +
+        textArea.append( "[" +
+                "INFO" +
+                "] " +
+                "("+
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) +
+                ")  " +
+                toLog +
+                "\n");
+    }
+
+    public static void putToErrorOut(String toLog){
+
+        JTextArea textArea = WindowMaker.logArea;
+
+        textArea.append( "[" +
+                        "ERROR" +
+                        "] " +
+                "("+
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) +
+                ")  " +
                 toLog +
                 "\n");
     }
