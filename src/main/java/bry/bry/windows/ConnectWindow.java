@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static bry.bry.windows.DevicePanes.*;
+
 public class ConnectWindow {
 
     public static JFrame connectFrame = new JFrame("Connect");
@@ -49,26 +51,33 @@ public class ConnectWindow {
     }
 
     public static void newErrorMessage(String error, JFrame owner, String header){
-        JDialog dialog = new JDialog(owner,header);
-        JLabel label = new JLabel(error);
-        dialog.add(label);
-        dialog.setSize(100,50);
-        dialog.setResizable(false);
-        dialog.setLayout(new GridLayout());
-        dialog.setLocationRelativeTo(null);
-        dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        dialog.setVisible(true);
+        JOptionPane.showMessageDialog(owner,error,header,JOptionPane.ERROR_MESSAGE);
     }
 
     public static ActionListener connectListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            System.out.println("rahh");
+//            System.out.println("A"+deviceNameField.getText());
+//            System.out.println("B"+ipAdrField.getText());
+//
+//            System.out.println("C"+devicePanels.keySet());
+//            System.out.println("D"+deviceNameAndAddress.values());
 
-            if (!DevicePanes.devicePanels.containsKey(deviceNameField.getText())){
-                DevicePanes.newPanelTemplate(deviceNameField.getText(), ipAdrField.getText());
+            DevicePanes devicePanes = new DevicePanes();
+
+            if (!devicePanels.containsKey(deviceNameField.getText()) && !deviceNameAndAddress.containsValue(ipAdrField.getText())){
+               devicePanes.newPanelTemplate(deviceNameField.getText(), ipAdrField.getText());
+            } else if (deviceNameAndAddress.containsValue(ipAdrField.getText())){
+                newErrorMessage("Cannot have the same address as another entry",connectFrame,"Connect Error");
+
             } else newErrorMessage("Cannot have the same name as another entry",connectFrame,"Connect Error");
+
+
+
+
+
+
 
 
 

@@ -10,13 +10,13 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-import static bry.bry.client.ClientStuff.getOutput;
+
 import static javax.management.remote.JMXConnectorFactory.connect;
 
 
 class ClientTask implements Runnable {
 
-    private final String ipAdr = "192.168.1.247";
+    public String ipAdr = "192.168.1.247";
 
 
     @Override
@@ -27,33 +27,33 @@ class ClientTask implements Runnable {
             WindowMaker.newMainWindow();
 
 
+//            ClientStuff stuff = new ClientStuff();
+//
+//            stuff.openClient(ipAdr, 154);
+//
+//
+//
+//
+//            while (true) {
+//                try {
+//                    Socket socket = new Socket();
+//                    socket.connect(new InetSocketAddress(InetAddress.getByName(ipAdr), 154) );
+//                    socket.close();
+//                } catch (IOException e) {
+//                    System.out.println(e);
+//                    break;
+//                }
+//
+//
+//
+//                System.out.println(getOutput());
+//
+//
+//            }
+//            ClientStuff.stopClient();
+//            WindowMaker.mainFrame.dispose();
 
-
-            ClientStuff.openClient(ipAdr, 154);
-            ClientStuff stuff = new ClientStuff();
-
-
-
-            while (true) {
-                try {
-                    Socket socket = new Socket();
-                    socket.connect(new InetSocketAddress(InetAddress.getByName(ipAdr), 154) );
-                    socket.close();
-                } catch (IOException e) {
-                    System.out.println(e);
-                    break;
-                }
-
-
-
-                System.out.println(getOutput());
-
-
-            }
-            ClientStuff.stopClient();
-            WindowMaker.mainFrame.dispose();
-
-        } catch (InterruptedException | IOException e) {
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
 
 
@@ -71,8 +71,8 @@ public class Main {
 
         ClientTask clientTask = new ClientTask();
 
-
         Thread thread = new Thread(clientTask);
+
 
 
         thread.start();

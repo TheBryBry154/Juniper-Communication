@@ -2,12 +2,10 @@ package bry.bry.windows;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.net.URL;
 
+import static bry.bry.windows.MiscUtils.rightClickListener;
 import static bry.bry.windows.SettingsWindow.settingsItem;
 import static bry.bry.windows.SettingsWindow.settingsListener;
 
@@ -15,14 +13,15 @@ public class WindowMaker {
 
     public static JFrame mainFrame = new JFrame("Juniper Communication");
 
-
-    public static JButton connectButton = new JButton("Connect");
+    //  public static JButton connectButton = new JButton("Connect");
 
     public static JMenuBar bar = new JMenuBar();
     public static JMenu menu = new JMenu("File");
 
     public static JMenuItem connectItem = new JMenuItem("Connect");
     public static JMenuItem logItem = new JMenuItem("Log");
+
+
 
     public static DefaultListModel listModel = new DefaultListModel();
 
@@ -33,10 +32,7 @@ public class WindowMaker {
     public static JScrollPane logPane = new JScrollPane(logArea);
 
     public static JSplitPane mainPane = new JSplitPane(
-            JSplitPane.HORIZONTAL_SPLIT,true, deviceListScroll, logPane);
-
-
-
+            JSplitPane.HORIZONTAL_SPLIT, true, deviceListScroll, logPane);
 
 
     public static void newMainWindow() throws InterruptedException {
@@ -64,14 +60,12 @@ public class WindowMaker {
         deviceList.setVisibleRowCount(-1);
 
 
-
-
         //deviceList.setSize(100,100);
 
-        connectButton.setBounds(450, 350, 100, 100);
-        connectButton.setLayout(new FlowLayout());
-        connectButton.setBackground(Color.gray);
-        connectButton.addActionListener(connectListener);
+//        connectButton.setBounds(450, 350, 100, 100);
+//        connectButton.setLayout(new FlowLayout());
+//        connectButton.setBackground(Color.gray);
+//        connectButton.addActionListener(connectListener);
 
 
         logArea.setEditable(true);
@@ -81,8 +75,7 @@ public class WindowMaker {
 
         deviceList.setFixedCellHeight(50);
 
-
-
+        deviceList.addMouseListener(rightClickListener);
 
         mainFrame.setSize(1020, 575);
 
@@ -104,8 +97,6 @@ public class WindowMaker {
     }
 
 
-
-
     public static ActionListener logListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -113,24 +104,15 @@ public class WindowMaker {
             deviceList.clearSelection();
             mainPane.setRightComponent(logPane);
             mainPane.setDividerLocation(mainPane.getLastDividerLocation());
-         }
-    };
-
-
-    public static ActionListener connectListener = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
-             ConnectWindow.newConnectWindow();
-//            mainPane.setRightComponent(connectButton);
-//            mainPane.setDividerLocation(mainPane.getLastDividerLocation());
-
-
-
         }
     };
 
 
 
-
-    }
+    public static ActionListener connectListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            ConnectWindow.newConnectWindow();
+        }
+    };
+}
