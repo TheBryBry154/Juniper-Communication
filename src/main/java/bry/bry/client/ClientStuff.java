@@ -10,11 +10,11 @@ import java.net.Socket;
 
 public class ClientStuff {
 
-    private static Socket clientSocket;
-    private static PrintWriter writer;
-    private static BufferedReader reader;
+    private Socket clientSocket;
+    private PrintWriter writer;
+    private BufferedReader reader;
 
-    public static void openClient(String ip, int port) throws IOException {
+    public void openClient(String ip, int port) throws IOException {
 
         LogStuff.putToLogOut("Starting Client");
         clientSocket = new Socket(ip, port);
@@ -25,24 +25,24 @@ public class ClientStuff {
         System.out.println("Connected: " + clientSocket.isConnected());
     }
 
-    public static void sendMessage(String msg) throws IOException {
+    public void sendMessage(String msg) throws IOException {
 
         writer.println(msg);
 
     }
 
-    public static String getOutput() throws IOException {
+    public String getOutput() throws IOException {
 
         return reader.readLine();
 
     }
 
-    public static Socket getClientSocket() {
+    public Socket getClientSocket() {
         return clientSocket;
     }
 
 
-    public static void stopClient() throws IOException {
+    public void stopClient() throws IOException {
         clientSocket.close();
         writer.close();
         reader.close();
