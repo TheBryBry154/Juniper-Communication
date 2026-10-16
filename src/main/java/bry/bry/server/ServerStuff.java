@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.EventListener;
 
 import static java.lang.System.out;
 
@@ -22,23 +23,8 @@ public class ServerStuff {
     private static BufferedReader reader;
 
     public static void openServer(int port) throws IOException {
-        try {
-            out.println("opening server");
 
-            serverSocket = new ServerSocket(port);
-            out.println("new server with port: " + serverSocket.getLocalPort() + " and address: " + serverSocket.getInetAddress());
-
-            clientSocket = serverSocket.accept();
-
-            System.out.println("new server client with port: " + clientSocket.getPort() + " and address: " + clientSocket.getInetAddress());
-
-            writer = new PrintWriter(clientSocket.getOutputStream(), true);
-            reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-        } catch (Exception e) {
-            LogStuff.putToErrorOut(e.getMessage());
-            throw new RuntimeException(e);
-        }
+        ServerConnectThread thread = new ServerConnectThread(port);
 
         String inputLine;
         while ((inputLine = reader.readLine()) != null) {
@@ -67,6 +53,7 @@ public class ServerStuff {
         clientSocket.close();
         serverSocket.close();
         out.println("SERVER TERMINATED");
+        openServer(154);
     }
 
 

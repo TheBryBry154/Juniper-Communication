@@ -5,6 +5,9 @@ import java.awt.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static bry.bry.windows.DevicePanes.devicePanels;
+import static bry.bry.windows.WindowMaker.*;
+
 public class DeviceListRenderer extends DefaultListCellRenderer  {
 
     private static final Path pathDraft = Paths.get(DeviceListRenderer.class.toString());
@@ -31,10 +34,14 @@ public class DeviceListRenderer extends DefaultListCellRenderer  {
             if (cellHasFocus)  label.setIcon(new ImageIcon(bluePath.toString()));
             else label.setIcon(new ImageIcon(dogsPath.toString()));
 
-            if (isSelected && WindowMaker.mainPane.getRightComponent() != DevicePanes.devicePanels.get(value)){
-                WindowMaker.mainPane.setRightComponent(DevicePanes.devicePanels.get(value));
-                WindowMaker.mainPane.setDividerLocation(WindowMaker.mainPane.getLastDividerLocation());
+            if (isSelected && mainPane.getRightComponent() != devicePanels.get(value)){
+                mainPane.setRightComponent(devicePanels.get(value));
+                mainPane.setDividerLocation(mainPane.getLastDividerLocation());
             }
+
+
+
+
 
             label.setHorizontalTextPosition(JLabel.RIGHT);
             label.setFont(font);

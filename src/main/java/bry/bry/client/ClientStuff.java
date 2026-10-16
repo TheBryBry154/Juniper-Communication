@@ -1,12 +1,14 @@
 package bry.bry.client;
 
 import bry.bry.LogStuff;
+import bry.bry.windows.DevicePanes;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class ClientStuff {
 
@@ -14,15 +16,23 @@ public class ClientStuff {
     private PrintWriter writer;
     private BufferedReader reader;
 
-    public void openClient(String ip, int port) throws IOException {
+    public static HashMap<String, Client> nameToClientMap = new HashMap<>();
 
-        LogStuff.putToLogOut("Starting Client");
-        clientSocket = new Socket(ip, port);
-        LogStuff.putToLogOut("new client with port: " + clientSocket.getPort() + " and address: " + clientSocket.getInetAddress());
-        writer = new PrintWriter(clientSocket.getOutputStream(), true);
-        reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+    public void openClient(String name, String ip, int port) throws IOException {
+        if (!nameToClientMap.containsKey(name)) {
+            LogStuff.putToLogOut("Starting Client");
+            clientSocket = new Socket(ip, port);
+            LogStuff.putToLogOut("new client with port: " + clientSocket.getPort() + " and address: " + clientSocket.getInetAddress());
+            writer = new PrintWriter(clientSocket.getOutputStream(), true);
+            reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-        System.out.println("Connected: " + clientSocket.isConnected());
+            Client client = new Client(name, ip, clientSocket, writer, reader);
+            nameToClientMap.put(name, client);
+
+
+            System.out.println("Connected: " + clientSocket.isConnected());
+            DevicePanes.deviceNameAndConnectStatus.put(name, clientSocket.isConnected());
+        }
     }
 
     public void sendMessage(String msg) throws IOException {
@@ -42,11 +52,15 @@ public class ClientStuff {
     }
 
 
-    public void stopClient() throws IOException {
-        clientSocket.close();
-        writer.close();
-        reader.close();
-        System.out.println("CLIENT TERMINATED");
+    public static void stopClient(String name) throws IOException {
+
+        Client client = nameToClientMap.get(name);
+
+        client.getClientSocket().close();
+        client.getWriter().close();
+        client.getReader().close();
+        System.out.println("CLIENT: "+ client.getIpAdr() +" TERMINATED");
+        nameToClientMap.remove(name);
     }
 
 

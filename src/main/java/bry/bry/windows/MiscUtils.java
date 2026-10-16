@@ -1,12 +1,15 @@
 package bry.bry.windows;
 
+import bry.bry.LogStuff;
 import bry.bry.client.ClientConnectThread;
+import bry.bry.client.ClientStuff;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 import static bry.bry.windows.WindowMaker.*;
 
@@ -82,7 +85,15 @@ public class MiscUtils {
             }
 
             if (deviceList.getSelectedIndex() != -1) {
-                listModel.remove(deviceList.getSelectedIndex());
+                try {
+                    ClientStuff.stopClient(listModel.elementAt(row).toString());
+                    DevicePanes.devicePanels.remove(listModel.elementAt(row).toString());
+                    listModel.remove(deviceList.getSelectedIndex());
+                } catch (IOException ex) {
+                    LogStuff.putToErrorOut("Could not terminate client device: " + listModel.elementAt(row));
+                    LogStuff.putToErrorOut(ex.getMessage());
+                }
+
             }
         }
     };
@@ -92,15 +103,19 @@ public class MiscUtils {
         public void actionPerformed(ActionEvent e) {
             if (deviceList.getSelectedIndex() != -1) {
                 System.out.println(row);
-                connectDevice(DevicePanes.deviceNameAndAddress.get(listModel.elementAt(row)));
+                connectDevice(
+                        DevicePanes.deviceNameAndAddress.get(listModel.elementAt(row)),
+                        listModel.elementAt(row).toString()
+                );
                // connectDevice(DevicePanes.deviceNameAndAddress.get(listModel.elementAt(deviceList.getSelectedIndex())));
             }
             }
     };
 
-    public static void connectDevice(String address){
+    public static void connectDevice(String address, String name){
         ClientConnectThread connectThread = new ClientConnectThread();
         connectThread.ipAdr = address;
+        connectThread.name = name;
 
         Thread thread = new Thread(connectThread);
         thread.start();
