@@ -3,6 +3,7 @@ package bry.bry.windows;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.ImageProducer;
 import java.net.URL;
 
 import static bry.bry.windows.MiscUtils.rightClickListener;
@@ -28,6 +29,7 @@ public class WindowMaker {
     public static JList deviceList = new JList(listModel);
     public static JScrollPane deviceListScroll = new JScrollPane(deviceList);
 
+
     public static JTextArea logArea = new JTextArea(10, 1);
     public static JScrollPane logPane = new JScrollPane(logArea);
 
@@ -40,6 +42,8 @@ public class WindowMaker {
         connectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, InputEvent.CTRL_DOWN_MASK));
         connectItem.addActionListener(connectListener);
 
+
+
         settingsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
         settingsItem.addActionListener(settingsListener);
 
@@ -48,12 +52,16 @@ public class WindowMaker {
 
 
         menu.setMnemonic(KeyEvent.VK_E);
+
         menu.add(connectItem);
         menu.add(settingsItem);
         menu.add(logItem);
 
         bar.getComponent().setBackground(Color.gray);
         bar.add(menu);
+
+
+
 
         deviceList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         deviceList.setLayoutOrientation(JList.VERTICAL);
@@ -78,8 +86,9 @@ public class WindowMaker {
         deviceList.addMouseListener(rightClickListener);
 
         mainFrame.setSize(1020, 575);
+        System.out.println((WindowMaker.class.getResource("/JunCom.png")));
 
-
+        mainFrame.setIconImage(new ImageIcon((WindowMaker.class.getResource("/JunCom.png"))).getImage());
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -92,7 +101,6 @@ public class WindowMaker {
         mainFrame.getContentPane().add(mainPane);
         mainFrame.setJMenuBar(bar);
         mainFrame.setResizable(true);
-
 
     }
 

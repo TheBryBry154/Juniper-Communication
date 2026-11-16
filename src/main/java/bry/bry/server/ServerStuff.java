@@ -23,8 +23,23 @@ public class ServerStuff {
     private static BufferedReader reader;
 
     public static void openServer(int port) throws IOException {
+        try {
+            out.println("opening server");
 
-        ServerConnectThread thread = new ServerConnectThread(port);
+            serverSocket = new ServerSocket(port);
+            out.println("new server with port: " + serverSocket.getLocalPort() + " and address: " + serverSocket.getInetAddress());
+
+            clientSocket = serverSocket.accept();
+
+            System.out.println("new server client with port: " + clientSocket.getPort() + " and address: " + clientSocket.getInetAddress());
+
+            writer = new PrintWriter(clientSocket.getOutputStream(), true);
+            reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+        } catch (Exception e) {
+            LogStuff.putToErrorOut(e.getMessage());
+            throw new RuntimeException(e);
+        }
 
         String inputLine;
         while ((inputLine = reader.readLine()) != null) {

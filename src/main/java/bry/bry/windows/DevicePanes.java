@@ -22,7 +22,8 @@ public class DevicePanes {
 
         JLabel nameLabel = new JLabel("Name: " + name);
         JLabel ipAdrLabel = new JLabel("Address: " + ipAdr);
-        JLabel connectionLabel = new JLabel("Connected: " + deviceNameAndConnectStatus.get(name));
+        JLabel connectionLabel = new JLabel("Connected: " + false);
+
         JButton connectToDeviceButton = new JButton("Connect");
         //JLabel connected = new JLabel((Icon) DeviceListRenderer.bluePath);
 
@@ -36,11 +37,13 @@ public class DevicePanes {
 
 
         panel.setLayout(new GridLayout());
+        panel.add(connectionLabel);
         panel.add(nameLabel);
         panel.add(ipAdrLabel);
         panel.add(connectToDeviceButton);
         panel.setVisible(true);
         panel.setName(name);
+
 
         devicePanels.put(name, panel);
         deviceNameAndAddress.put(name, ipAdr);

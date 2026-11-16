@@ -3,49 +3,39 @@ package bry.bry.client;
 import bry.bry.LogStuff;
 import bry.bry.windows.DevicePanes;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.HashMap;
 
 public class ClientStuff {
 
     private Socket clientSocket;
-    private PrintWriter writer;
-    private BufferedReader reader;
+    private DataOutputStream writer;
+    private DataInputStream reader;
 
     public static HashMap<String, Client> nameToClientMap = new HashMap<>();
 
     public void openClient(String name, String ip, int port) throws IOException {
-        if (!nameToClientMap.containsKey(name)) {
+       // if (!nameToClientMap.containsKey(name)) {
             LogStuff.putToLogOut("Starting Client");
-            clientSocket = new Socket(ip, port);
+
+            clientSocket = new Socket();
+            clientSocket.connect(new InetSocketAddress(ip, port), 8000);
+
             LogStuff.putToLogOut("new client with port: " + clientSocket.getPort() + " and address: " + clientSocket.getInetAddress());
-            writer = new PrintWriter(clientSocket.getOutputStream(), true);
-            reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            writer = new DataOutputStream(clientSocket.getOutputStream());
+            reader = new DataInputStream(clientSocket.getInputStream());
 
             Client client = new Client(name, ip, clientSocket, writer, reader);
             nameToClientMap.put(name, client);
 
 
-            System.out.println("Connected: " + clientSocket.isConnected());
+            System.out.println("Connected: " + name + " " + clientSocket.isConnected());
             DevicePanes.deviceNameAndConnectStatus.put(name, clientSocket.isConnected());
         }
-    }
 
-    public void sendMessage(String msg) throws IOException {
-
-        writer.println(msg);
-
-    }
-
-    public String getOutput() throws IOException {
-
-        return reader.readLine();
-
-    }
+    //}
 
     public Socket getClientSocket() {
         return clientSocket;

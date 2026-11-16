@@ -63,24 +63,16 @@ class ClientTask implements Runnable {
 public class Main {
     public static void main(String[] args) throws IOException {
 
-
-       // LogStuff.putToLogOut("------START------");
-
-
-
+        LogStuff.putToLogOut("Starting JunCom");
 
         ClientTask clientTask = new ClientTask();
 
         Thread thread = new Thread(clientTask);
 
-
-
         thread.start();
+        LogStuff.putToLogOut("Client Thread Started!");
 
-
-
-        ServerStuff.openServer(154);
-
+        //ServerStuff.openServer(154);
 
     }
 

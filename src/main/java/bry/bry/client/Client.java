@@ -1,6 +1,8 @@
 package bry.bry.client;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -9,10 +11,10 @@ public class Client {
     private String name;
     private String ipAdr;
     private Socket clientSocket;
-    private PrintWriter writer;
-    private BufferedReader reader;
+    private DataOutputStream writer;
+    private DataInputStream reader;
 
-    public Client(String name, String ipAdr, Socket clientSocket, PrintWriter writer, BufferedReader reader){
+    public Client(String name, String ipAdr, Socket clientSocket, DataOutputStream writer, DataInputStream reader){
         this.name = name;
         this.ipAdr = ipAdr;
         this.clientSocket = clientSocket;
@@ -29,11 +31,11 @@ public class Client {
         return ipAdr;
     }
 
-    public BufferedReader getReader() {
+    public DataInputStream getReader() {
        return reader;
     }
 
-    public PrintWriter getWriter() {
+    public DataOutputStream getWriter() {
         return writer;
     }
 

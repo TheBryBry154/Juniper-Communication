@@ -15,7 +15,7 @@ public class ConnectWindow {
     public static JTextField deviceNameField = new JTextField( 9);
     public static JButton connectButton = new JButton("Connect");
 
-    public static JLabel connectLabel = new JLabel("Connect a device");
+    public static JLabel connectMainLabel = new JLabel(new ImageIcon(ConnectWindow.class.getResource("/Connect-main.png")));
 
     public static JLabel ipAdrLabel = new JLabel("Device IP Address: ");
     public static JLabel deviceNameLabel = new JLabel("Device Name: ");
@@ -29,6 +29,8 @@ public class ConnectWindow {
         connectFrame.setLocationRelativeTo(null);
         connectFrame.setResizable(false);
         connectFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+        connectMainLabel.setBounds(10,10,500,200);
 
         ipAdrField.setBounds(330, 10, 120, 20);
         ipAdrLabel.setBounds(220,-30,1000, 100);
@@ -44,6 +46,7 @@ public class ConnectWindow {
         connectFrame.add(ipAdrField);
         connectFrame.add(connectButton);
         connectFrame.add(deviceNameField);
+        connectFrame.add(connectMainLabel);
         connectFrame.setVisible(true);
 
 
@@ -66,12 +69,15 @@ public class ConnectWindow {
 
             DevicePanes devicePanes = new DevicePanes();
 
-            if (!devicePanels.containsKey(deviceNameField.getText()) && !deviceNameAndAddress.containsValue(ipAdrField.getText())){
-               devicePanes.newPanelTemplate(deviceNameField.getText(), ipAdrField.getText());
-            } else if (deviceNameAndAddress.containsValue(ipAdrField.getText())){
-                newErrorMessage("Cannot have the same address as another entry",connectFrame,"Connect Error");
 
-            } else newErrorMessage("Cannot have the same name as another entry",connectFrame,"Connect Error");
+            ///  will re-add if i care to stop the masses from having fun and whimsy
+
+//            if (!devicePanels.containsKey(deviceNameField.getText()) && !deviceNameAndAddress.containsValue(ipAdrField.getText())){
+               devicePanes.newPanelTemplate(deviceNameField.getText(), ipAdrField.getText());
+//            } else if (deviceNameAndAddress.containsValue(ipAdrField.getText())){
+//                newErrorMessage("Cannot have the same address as another entry",connectFrame,"Connect Error");
+//
+//            } else newErrorMessage("Cannot have the same name as another entry",connectFrame,"Connect Error");
 
 
 

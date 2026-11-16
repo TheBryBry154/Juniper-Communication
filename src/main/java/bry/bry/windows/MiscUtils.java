@@ -117,6 +117,7 @@ public class MiscUtils {
         connectThread.ipAdr = address;
         connectThread.name = name;
 
+        System.out.println("thread start!");
         Thread thread = new Thread(connectThread);
         thread.start();
 

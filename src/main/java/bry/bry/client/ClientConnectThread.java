@@ -15,35 +15,20 @@ public class ClientConnectThread implements Runnable {
     @Override
     public void run() {
 
-        try {
-            ClientStuff stuff = new ClientStuff();
+        ClientStuff stuff = new ClientStuff();
 
+        try {
+            System.out.println("client open");
             stuff.openClient(name, ipAdr, 154);
 
+            System.out.println("heart");
+            Thread heartbeatThread = new Thread(new HeartbeatClient(ClientStuff.nameToClientMap.get(name)));
+            heartbeatThread.run();
 
-        while (true) {
-            try {
-                Socket socket = new Socket();
-                socket.connect(new InetSocketAddress(InetAddress.getByName(ipAdr), 154) );
-                socket.close();
-            } catch (IOException e) {
-
-                if (ipAdr.isEmpty()) LogStuff.putToWarningOut("Ip Address is empty");
-
-//                LogStuff.putToWarningOut("Could not connect to server, Closing client: " + ipAdr);
-//                ClientStuff.stopClient(name);
-
-
-                System.out.println(e);
-                break;
-            }
-
+        } catch (Exception e) {
+            LogStuff.putToErrorOut(String.valueOf(e));
         }
 
-            } catch (IOException e) {
-            LogStuff.putToErrorOut(e.getCause().toString());
 
-            System.out.println(e);
-        }
     }
-}
+    }
