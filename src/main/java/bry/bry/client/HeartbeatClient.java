@@ -6,8 +6,7 @@ import bry.bry.windows.DevicePanes;
 
 import javax.swing.*;
 import java.io.*;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.net.http.HttpClient;
 import java.util.concurrent.ExecutorService;
 
@@ -31,89 +30,49 @@ public class HeartbeatClient implements Runnable {
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
-        while (true){
+        while (true) {
+            if (panel.getComponent(0) instanceof JLabel label) {
+                try {
 
-            try {
+                    if (!address.isReachable(8000)) {
 
-                if (panel.getComponent(0) instanceof JLabel label) {
+                        ClientStuff.stopClient(client.getName());
 
-                    System.out.println(address.isReachable(8000));
+                        LogStuff.putToErrorOut("Closed Client: " + client.getName() + " as Host failed to Heartbeat");
 
-                if (!address.isReachable(8000)){
-
-                         ClientStuff.stopClient(client.getName());
-
-                        LogStuff.putToErrorOut("Closed Client: " + client.getName() + " failed to Heartbeat");
                         label.setText("Connected: False");
 
-                }
+                    }
 
+                    Socket testSocket = new Socket();
+                    testSocket.connect(new InetSocketAddress(client.getIpAdr(), 154), 100);
+                    testSocket.close();
 
+                    LogStuff.putToLogOut("Heartbeat Ping from: " + client.getName() + "/" + client.getIpAdr());
                     label.setText("Connected: True");
+                    Thread.sleep(30000);
 
-                    System.out.println("ping!");
-                    Thread.sleep(5000);
+
+                } catch (IOException e) {
+                    LogStuff.putToErrorOut(e.getMessage());
+
+                    try {
+                        ClientStuff.stopClient(client.getName());
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
+                    LogStuff.putToErrorOut("Closed Client: " + client.getName() + " as JCom port failed to Heartbeat");
+                    label.setText("Connected: False");
+
+
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
 
-
-            } catch (UnknownHostException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
             }
-//            try {
-
-
-
-//                if (panel.getComponent(0) instanceof JLabel label) {
-//
-//                    System.out.println("ping " + ping);
-//
-//                    ExecutorService service =
-//
-//                    writer.writeInt(ping.length);
-//                    System.out.println("int " + ping.length);
-//
-//                    writer.write(ping);
-//                    System.out.println("write");
-//
-//                    writer.flush();
-//                    System.out.println("flush");
-//
-//                    int length = reader.readInt();
-//                    System.out.println("read");
-//
-//                    byte[] pong = new byte[length];
-//                    System.out.println("pong" + length);
-//
-//                    reader.readFully(pong);
-//                    System.out.println("full");
-//
-//                    System.out.println("a " + new String(pong));
-//
-//                    if (!new String(pong).equals("AppleFritters")) {
-//
-//                        ClientStuff.stopClient(client.getName());
-//
-//                        LogStuff.putToErrorOut("Closed Client: " + client.getName() + " failed to Heartbeat");
-//                        label.setText("Connected: False");
-//                    }
-//
-//
-//                    label.setText("Connected: True");
-//
-//                    Thread.sleep(5000);
-//                }
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
-
         }
+
     }
 }
 

@@ -1,6 +1,7 @@
 package bry.bry.windows;
 
 import bry.bry.LogStuff;
+import bry.bry.client.Client;
 import bry.bry.client.ClientConnectThread;
 import bry.bry.client.ClientStuff;
 
@@ -18,6 +19,7 @@ public class MiscUtils {
     public static JPopupMenu listRightClickMenu;
     public static JMenuItem deleteItem;
     public static JMenuItem popupConnectItem;
+    public static JMenuItem popupDisconnectItem;
     private static int row;
 
     public static MouseListener rightClickListener = new MouseListener() {
@@ -61,12 +63,15 @@ public class MiscUtils {
             listRightClickMenu = new JPopupMenu();
             deleteItem = new JMenuItem("Delete");
             popupConnectItem = new JMenuItem("Connect");
+            popupDisconnectItem = new JMenuItem("Disconnect");
 
             deleteItem.addActionListener(removeListItem);
             popupConnectItem.addActionListener(connectListItem);
+            popupDisconnectItem.addActionListener(disconnectListItem);
 
             listRightClickMenu.add(deleteItem);
             listRightClickMenu.add(popupConnectItem);
+            listRightClickMenu.add(popupDisconnectItem);
 
             listRightClickMenu.show(deviceList,e.getX(), e.getY());
 
@@ -79,16 +84,19 @@ public class MiscUtils {
 
             if (listModel.get(deviceList.getSelectedIndex()) instanceof JPanel panel){
               if ( panel.getComponent(1) instanceof JLabel label){
-                  DevicePanes.devicePanels.remove(label.getText());
+
                   DevicePanes.deviceNameAndAddress.remove(label.getText());
+                  DevicePanes.devicePanels.remove(label.getText());
               }
             }
 
             if (deviceList.getSelectedIndex() != -1) {
                 try {
-                    ClientStuff.stopClient(listModel.elementAt(row).toString());
+
                     DevicePanes.devicePanels.remove(listModel.elementAt(row).toString());
                     listModel.remove(deviceList.getSelectedIndex());
+                    mainPane.setRightComponent(logPane);
+                    ClientStuff.stopClient(listModel.elementAt(row).toString());
                 } catch (IOException ex) {
                     LogStuff.putToErrorOut("Could not terminate client device: " + listModel.elementAt(row));
                     LogStuff.putToErrorOut(ex.getMessage());
@@ -102,14 +110,30 @@ public class MiscUtils {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (deviceList.getSelectedIndex() != -1) {
-                System.out.println(row);
+                System.out.println(row + " -- " +  DevicePanes.deviceNameAndAddress.get(listModel.elementAt(row)));
                 connectDevice(
                         DevicePanes.deviceNameAndAddress.get(listModel.elementAt(row)),
                         listModel.elementAt(row).toString()
                 );
-               // connectDevice(DevicePanes.deviceNameAndAddress.get(listModel.elementAt(deviceList.getSelectedIndex())));
             }
             }
+    };
+
+    public static ActionListener disconnectListItem = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (deviceList.getSelectedIndex() != -1) {
+                JPanel panel = DevicePanes.devicePanels.get(listModel.elementAt(row));
+                if (panel.getComponent(0) instanceof JLabel label) {
+                    label.setText("Connected: False");
+                }
+                try {
+                    ClientStuff.stopClient(listModel.elementAt(row).toString());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        }
     };
 
     public static void connectDevice(String address, String name){

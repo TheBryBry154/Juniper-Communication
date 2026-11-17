@@ -21,7 +21,7 @@ public class ClientStuff {
             LogStuff.putToLogOut("Starting Client");
 
             clientSocket = new Socket();
-            clientSocket.connect(new InetSocketAddress(ip, port), 8000);
+            clientSocket.connect(new InetSocketAddress(ip, port), 31000);
 
             LogStuff.putToLogOut("new client with port: " + clientSocket.getPort() + " and address: " + clientSocket.getInetAddress());
             writer = new DataOutputStream(clientSocket.getOutputStream());

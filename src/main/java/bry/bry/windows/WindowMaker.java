@@ -20,6 +20,7 @@ public class WindowMaker {
     public static JMenu menu = new JMenu("File");
 
     public static JMenuItem connectItem = new JMenuItem("Connect");
+    public static JMenuItem newLogWindowItem = new JMenuItem("New Log Window");
     public static JMenuItem logItem = new JMenuItem("Log");
 
 
@@ -30,14 +31,22 @@ public class WindowMaker {
     public static JScrollPane deviceListScroll = new JScrollPane(deviceList);
 
 
+    public static JFrame logFrame = new JFrame("JunCom Log");
+
     public static JTextArea logArea = new JTextArea(10, 1);
+    public static JTextArea autoLogArea = new JTextArea(10, 1);
+
     public static JScrollPane logPane = new JScrollPane(logArea);
+    public static JScrollPane autoLogPane = new JScrollPane(autoLogArea);
 
     public static JSplitPane mainPane = new JSplitPane(
             JSplitPane.HORIZONTAL_SPLIT, true, deviceListScroll, logPane);
 
 
     public static void newMainWindow() throws InterruptedException {
+
+        autoLogArea.setAutoscrolls(true);
+
 
         connectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, InputEvent.CTRL_DOWN_MASK));
         connectItem.addActionListener(connectListener);
@@ -46,6 +55,10 @@ public class WindowMaker {
 
         settingsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
         settingsItem.addActionListener(settingsListener);
+
+
+        newLogWindowItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_SEMICOLON, InputEvent.CTRL_DOWN_MASK));
+        newLogWindowItem.addActionListener(newLogListener);
 
         logItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_DOWN_MASK));
         logItem.addActionListener(logListener);
@@ -56,6 +69,7 @@ public class WindowMaker {
         menu.add(connectItem);
         menu.add(settingsItem);
         menu.add(logItem);
+        menu.add(newLogWindowItem);
 
         bar.getComponent().setBackground(Color.gray);
         bar.add(menu);
@@ -104,6 +118,20 @@ public class WindowMaker {
 
     }
 
+    public static void openLog(){
+        logFrame.getContentPane().add(autoLogPane);
+        logFrame.setResizable(false);
+        logFrame.setLayout(new GridLayout());
+        logFrame.setSize(750,250);
+        logFrame.setLocationRelativeTo(null);
+        logFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        logFrame.setVisible(true);
+
+//        deviceList.clearSelection();
+//        mainPane.setRightComponent(mainPane.getRightComponent() == null? logPane : mainPane.getRightComponent());
+//        mainPane.setDividerLocation(mainPane.getLastDividerLocation());
+    }
+
 
     public static ActionListener logListener = new ActionListener() {
         @Override
@@ -112,6 +140,16 @@ public class WindowMaker {
             deviceList.clearSelection();
             mainPane.setRightComponent(logPane);
             mainPane.setDividerLocation(mainPane.getLastDividerLocation());
+        }
+    };
+
+    public static ActionListener newLogListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            openLog();
+
+
         }
     };
 
